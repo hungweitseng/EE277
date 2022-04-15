@@ -27,8 +27,7 @@ int main(int argc, char **argv)
     size = atoi(argv[1])/sizeof(size_t);
     array = (size_t *)memalign(32,sizeof(size_t)*size);
     dest = (size_t *)memalign(32,sizeof(size_t)*size);
-    clock_gettime(CLOCK_MONOTONIC, &start);	/* mark start time */
-    write_memory_loop(array, size);
+    write_memory_loop(array, size*sizeof(size_t));
     clock_gettime(CLOCK_MONOTONIC, &start);	/* mark start time */
     memcpy(dest, array, size*sizeof(size_t));
     clock_gettime(CLOCK_MONOTONIC, &end);	/* mark start time */

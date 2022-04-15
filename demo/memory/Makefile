@@ -25,17 +25,31 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-all: memory_profile memory_profile_simd memory_copy
+all: memory_profile memory_reader memory_reader_simd memory_profile_simd memory_copy memory_copy_simd memory_copy_simd_128B
 
 memory_profile_simd: memory_profile.c
 	gcc -O3 -g -DSIMD -mavx memory_profile.c -o memory_profile_simd
 	
 memory_profile: memory_profile.c
-	gcc -O3 -g memory_profile.c -o memory_profile
+	gcc -O3 -DCSV -g memory_profile.c -o memory_profile
+
+memory_reader_simd: memory_reader.c
+	gcc -O3 -g -DSIMD -mavx memory_reader.c -o memory_reader_simd
+
+memory_reader: memory_reader.c
+	gcc -O0 -g memory_reader.c -o memory_reader
 
 memory_copy: memory_copy.c
-	gcc -O3 memory_copy.c -o memory_copy
+	gcc -O3 -DCSV memory_copy.c -o memory_copy
+
+memory_copy_simd: fast_memory_copy.c
+	gcc -O3 -DCSV -DMEMSET -mavx -msse4.1 -DSIMD fast_memory_copy.c -o memory_copy_simd
+
+memory_copy_simd_128B: fast_memory_copy.c
+	gcc -O3 -DCSV -mavx -msse4.1 -DSIMD -DMEMSET -DBLOCK128 fast_memory_copy.c -o memory_copy_simd_128B
+
 clean:
-	rm -f memory_profile memory_profile_simd memory_copy
+	rm -f memory_profile memory_reader memory_reader_simd memory_profile_simd memory_copy memory_copy_simd memory_copy_simd_128B
+
 	
 
